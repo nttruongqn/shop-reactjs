@@ -60,7 +60,7 @@ const Shop = () => {
           <Row>
             <Col lg="3" md="6">
               <div className="filter__widget">
-                <select onChange={handleFilter}>
+                <select onChange={handleFilter} className="w-100">
                   <option>Filter By Category</option>
                   <option value="sofa"> Sofa </option>
                   <option value="mobile"> Mobile </option>
@@ -71,8 +71,8 @@ const Shop = () => {
               </div>
             </Col>
             <Col lg="3" md="6" className="text-end">
-              <div className="filter__widget">
-                <select>
+              <div className="filter__widget" >
+                <select className="w-100">
                   <option>Sort By</option>
                   <option value="ascending"> Ascending </option>
                   <option value="descending"> Descending </option>

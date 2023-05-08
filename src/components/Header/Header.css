@@ -88,14 +88,14 @@
 .nav__icons .profile .profile__actions {
     position: absolute;
     top:90%;
-    left: 0;
+    right: -50px;
     width: 150px;
     z-index: 10;
-    padding: 15px;
+    padding: 5px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: var(--card-bg-01);
+    background-color: #fff;
     line-height: 30px;
     cursor: pointer;
     display: none;
