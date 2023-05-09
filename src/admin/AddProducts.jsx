@@ -10,7 +10,7 @@ const AddProducts = () => {
   const [title, setTitle] = useState("");
   const [shortDesc, setShortDesc] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("chair");
   const [price, setPrice] = useState("");
   const [productImg, setProductImg] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,7 @@ const AddProducts = () => {
 
   const addProduct = async (e) => {
     e.preventDefault();
+
     try {
       const docRef = await collection(db, "products");
       const storageRef = ref(
@@ -41,7 +42,7 @@ const AddProducts = () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
           await addDoc(docRef, {
-            title,
+            productName: title,
             shortDesc,
             description,
             category,

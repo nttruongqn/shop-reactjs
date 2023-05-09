@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CommonSection from "../components/UI/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { Col, Container, Row } from "reactstrap";
@@ -10,53 +10,75 @@ import ProductList from "../components/UI/ProductList";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../redux/slices/cartSlice";
 import { toast } from "react-toastify";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase.config";
 
 const ProductDetails = () => {
+  // const product = products.find((item) => item.id === id);
+
+  const [tab, setTab] = useState("desc");
+  const [rating, setRating] = useState(null);
+  const [product, setProduct] = useState({});
+
+  // const relatedProduct = products.filter((item) => item.category === category);
+  const reviewUser = useRef(null);
+  const reviewMsg = useRef(null);
+  const dispatch = useDispatch();
+
   const { id } = useParams();
-  const product = products.find((item) => item.id === id);
+  const docRef = doc(db, "products", id);
+
+  useEffect(() => {
+    const getProduct = async () => {
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setProduct(docSnap.data());
+      } else {
+        console.log("no product");
+      }
+    };
+
+    getProduct();
+  }, []);
+
+  console.log(product);
   const {
     imgUrl,
     productName,
     price,
-    avgRating,
-    reviews,
+    // avgRating,
+    // reviews,
     description,
     shortDesc,
-    category
+    category,
   } = product;
-  const [tab, setTab] = useState("desc");
-  const [rating, setRating] = useState(null)
-  const relatedProduct = products.filter((item) => item.category === category)
-  const reviewUser = useRef(null)
-  const reviewMsg = useRef(null)
-  const dispatch = useDispatch()
 
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const reviewUserName = reviewUser.current.value
-    const reviewUserMsg = reviewMsg.current.value
+    const reviewUserName = reviewUser.current.value;
+    const reviewUserMsg = reviewMsg.current.value;
     const reviewObject = {
       userName: reviewUserName,
       text: reviewUserMsg,
-      rating
-    }
-    console.log(reviewObject)
-    toast.success("Review submitted")
-
-  }
+      rating,
+    };
+    console.log(reviewObject);
+    toast.success("Review submitted");
+  };
 
   const addToCart = () => {
-    dispatch(cartActions.addItem({
-      id,
-      image: imgUrl,
-      productName,
-      price
-    }
-    ))
-    toast.success('Product added success')
-  }
-
+    dispatch(
+      cartActions.addItem({
+        id,
+        image: imgUrl,
+        productName,
+        price,
+      })
+    );
+    toast.success("Product added success");
+  };
 
   return (
     <Helmet title={productName}>
@@ -88,16 +110,19 @@ const ProductDetails = () => {
                       <i className="ri-star-half-s-line"></i>
                     </span>
                   </div>
-                  <p>
+                  {/* <p>
                     (<span>{avgRating}</span> ratings)
-                  </p>
+                  </p> */}
                 </div>
 
                 <span>{price}</span>
                 <p>{shortDesc}</p>
 
-                <motion.button whileTap={{ scale: 1.2 }} className="buy__btn" onClick={addToCart
-                }>
+                <motion.button
+                  whileTap={{ scale: 1.2 }}
+                  className="buy__btn"
+                  onClick={addToCart}
+                >
                   Add to cart
                 </motion.button>
               </div>
@@ -121,7 +146,7 @@ const ProductDetails = () => {
                   className={`${tab === "rev" ? "activate__tab" : ""}`}
                   onClick={() => setTab("rev")}
                 >
-                  Reviews ({reviews.length})
+                  {/* Reviews ({reviews.length}) */}
                 </h6>
               </div>
 
@@ -132,7 +157,7 @@ const ProductDetails = () => {
               ) : (
                 <div className="product-review mt-5">
                   <div className="review__wrapper">
-                    <ul>
+                    {/* <ul>
                       {reviews.map((item, index) => (
                         <li key={index} className="mb-4">
                           <h6>Truong Nguyen</h6>
@@ -140,45 +165,80 @@ const ProductDetails = () => {
                           <p>{item.text}</p>
                         </li>
                       ))}
-                    </ul>
+                    </ul> */}
 
                     <div className="review__form">
                       <h4>Leave your experience</h4>
                       <form action="" onSubmit={submitHandler}>
                         <div className="form__group">
-                          <input type="text" placeholder="Enter Name" ref={reviewUser} />
+                          <input
+                            type="text"
+                            placeholder="Enter Name"
+                            ref={reviewUser}
+                          />
                         </div>
 
                         <div className="form__group d-flex align-items-center gap-5 rating__group">
-                          <motion.span whileTap={{scale: 1.2}} onClick={() => setRating(1)}>1 <i className="ri-star-s-fill"></i></motion.span>
-                          <motion.span whileTap={{scale: 1.2}} onClick={() => setRating(2)}>2 <i className="ri-star-s-fill"></i></motion.span>
-                          <motion.span whileTap={{scale: 1.2}} onClick={() => setRating(3)}>3 <i className="ri-star-s-fill"></i></motion.span>
-                          <motion.span whileTap={{scale: 1.2}} onClick={() => setRating(4)}>4 <i className="ri-star-s-fill"></i></motion.span>
-                          <motion.span whileTap={{scale: 1.2}} onClick={() => setRating(5)}>5 <i className="ri-star-s-fill"></i></motion.span>
+                          <motion.span
+                            whileTap={{ scale: 1.2 }}
+                            onClick={() => setRating(1)}
+                          >
+                            1 <i className="ri-star-s-fill"></i>
+                          </motion.span>
+                          <motion.span
+                            whileTap={{ scale: 1.2 }}
+                            onClick={() => setRating(2)}
+                          >
+                            2 <i className="ri-star-s-fill"></i>
+                          </motion.span>
+                          <motion.span
+                            whileTap={{ scale: 1.2 }}
+                            onClick={() => setRating(3)}
+                          >
+                            3 <i className="ri-star-s-fill"></i>
+                          </motion.span>
+                          <motion.span
+                            whileTap={{ scale: 1.2 }}
+                            onClick={() => setRating(4)}
+                          >
+                            4 <i className="ri-star-s-fill"></i>
+                          </motion.span>
+                          <motion.span
+                            whileTap={{ scale: 1.2 }}
+                            onClick={() => setRating(5)}
+                          >
+                            5 <i className="ri-star-s-fill"></i>
+                          </motion.span>
                         </div>
 
                         <div className="form__group">
-                          <textarea type="text" placeholder="Review Message..." ref={reviewMsg} />
+                          <textarea
+                            type="text"
+                            placeholder="Review Message..."
+                            ref={reviewMsg}
+                          />
                         </div>
 
-                        <motion.button whileTap={{scale:1.2}} type="submit" className="buy__btn">Submit</motion.button>
+                        <motion.button
+                          whileTap={{ scale: 1.2 }}
+                          type="submit"
+                          className="buy__btn"
+                        >
+                          Submit
+                        </motion.button>
                       </form>
-
                     </div>
                   </div>
                 </div>
               )}
             </Col>
 
-            <Col lg='12' className="mt-5">
-              <h2 className="related__title">
-                You might also like
-              </h2>
+            {/* <Col lg="12" className="mt-5">
+              <h2 className="related__title">You might also like</h2>
               <Row>
-                <ProductList data={relatedProduct}>
-                </ProductList>
+                <ProductList data={relatedProduct}></ProductList>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </section>

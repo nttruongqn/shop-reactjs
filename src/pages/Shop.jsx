@@ -1,60 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import { Col, Container, Row } from "reactstrap";
 import "../styles/shop.css";
-import products from "../assets/data/products";
 import ProductList from "../components/UI/ProductList";
+import UserGetData from "../custom-hooks/userGetData";
 
 const Shop = () => {
-  const [productsData, setProductsData] = useState(products);
+  const [productsData, setProductsData] = useState([]);
+  const { data: products } = UserGetData("products");
 
-  const handleFilter = (e) => {
-    const filterValue = e.target.value;
-    if (filterValue === "sofa") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "sofa"
-      );
-      setProductsData(filteredProducts);
-    }
-    if (filterValue === "mobile") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "mobile"
-      );
-      setProductsData(filteredProducts);
-    }
-    if (filterValue === "chair") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "chair"
-      );
-      setProductsData(filteredProducts);
-    }
-    if (filterValue === "watch") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "watch"
-      );
-      setProductsData(filteredProducts);
-    }
-    if (filterValue === "wireless") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "wireless"
-      );
-      setProductsData(filteredProducts);
-    }
-  };
+  useEffect(() => {
+    setProductsData(products);
+  }, [products]);
 
-  const handleSearch = (e) => {
-    const searchTerm = e.target.value;
-    const searchedProducts = products.filter((item) =>
-      item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setProductsData(searchedProducts);
-  };
+  // useEffect(() => {}, [productsData]);
+
+  // const handleFilter = (e) => {
+  //   const filterValue = e.target.value;
+  //   if (filterValue === "") {
+  //     setProductsData(products);
+  //   }
+  //   if (filterValue === "sofa") {
+  //     const filteredProducts = productsData.filter(
+  //       (item) => item.category === "sofa"
+  //     );
+  //     setProductsData(filteredProducts);
+  //   }
+  //   if (filterValue === "mobile") {
+  //     const filteredProducts = productsData.filter(
+  //       (item) => item.category === "mobile"
+  //     );
+  //     setProductsData(filteredProducts);
+  //   }
+  //   if (filterValue === "chair") {
+  //     const filteredProducts = productsData.filter(
+  //       (item) => item.category === "chair"
+  //     );
+  //     setProductsData(filteredProducts);
+  //   }
+  //   if (filterValue === "watch") {
+  //     const filteredProducts = productsData.filter(
+  //       (item) => item.category === "watch"
+  //     );
+  //     setProductsData(filteredProducts);
+  //   }
+  //   if (filterValue === "wireless") {
+  //     const filteredProducts = productsData.filter(
+  //       (item) => item.category === "wireless"
+  //     );
+  //     setProductsData(filteredProducts);
+  //   }
+  // };
+
+  // const handleSearch = (e) => {
+  //   const searchTerm = e.target.value;
+  //   const searchedProducts = products.filter((item) =>
+  //     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  //   setProductsData(searchedProducts);
+  // };
 
   return (
     <Helmet title="shop">
       <CommonSection title="Product"></CommonSection>
-
+{/* 
       <section>
         <Container>
           <Row>
@@ -71,7 +81,7 @@ const Shop = () => {
               </div>
             </Col>
             <Col lg="3" md="6" className="text-end">
-              <div className="filter__widget" >
+              <div className="filter__widget">
                 <select className="w-100">
                   <option>Sort By</option>
                   <option value="ascending"> Ascending </option>
@@ -94,7 +104,7 @@ const Shop = () => {
             </Col>
           </Row>
         </Container>
-      </section>
+      </section> */}
 
       <section>
         <Container>

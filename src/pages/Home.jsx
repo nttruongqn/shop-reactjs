@@ -6,10 +6,10 @@ import '../styles/home.css';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion'
 import ProductList from '../components/UI/ProductList';
-import products from '../assets/data/products'
 import counterImg from '../assets/images/counter-timer-img.png'
 import Clock from '../components/UI/Clock';
 import Service from '../Service/Service'
+import UserGetData from '../custom-hooks/userGetData';
 
 
 const Home = () => {
@@ -20,6 +20,7 @@ const Home = () => {
   const [popularProducts, setPopularProducts] = useState([])
 
   const year = new Date().getFullYear();
+  const {data: products} = UserGetData('products')
 
   useEffect(() => {
     const filteredTrendingProducts = products.filter((item) => item.category === 'chair');
@@ -35,7 +36,7 @@ const Home = () => {
     setWirelessProducts(filteredWirelessProducts)
     setPopularProducts(filteredPopularProducts)
 
-  }, [])
+  }, [products])
 
   return <Helmet title={"Home"}>
     

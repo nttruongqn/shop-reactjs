@@ -4,14 +4,15 @@ import UserGetData from "../custom-hooks/userGetData";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
-const AllProducts = () => {
-  const { data: productsData } = UserGetData("products");
+const AllUsers = () => {
+  const { data: usersData } = UserGetData("users");
 
-  const deleteProduct = async(id) => {
-    await deleteDoc(doc(db, "products", id))
+  const deleteUser = async(id) => {
+    await deleteDoc(doc(db, "users", id))
     toast.success("Deleted!")
   }
 
+  console.log(usersData);
   return (
     <section>
       <Container>
@@ -21,23 +22,21 @@ const AllProducts = () => {
               <thead>
                 <tr>
                   <th>Image</th>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Price</th>
+                  <th>UserName</th>
+                  <th>Email</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {productsData.map((item) => (
-                  <tr key={item.id}>
+                {usersData.map((item) => (
+                  <tr key={item.uid}>
                     <td>
-                      <img src={item.imgUrl} alt="" />
+                      <img src={item.photoURL} alt="" />
                     </td>
-                    <td>{item.productName}</td>
-                    <td>{item.category}</td>
-                    <td>{item.price} $</td>
+                    <td>{item.displayName}</td>
+                    <td>{item.email}</td>
                     <td>
-                      <button className="btn btn-danger" onClick={()=> deleteProduct(item.id)}>Delete</button>
+                      <button className="btn btn-danger" onClick={()=> deleteUser(item.id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -50,4 +49,4 @@ const AllProducts = () => {
   );
 };
 
-export default AllProducts;
+export default AllUsers;

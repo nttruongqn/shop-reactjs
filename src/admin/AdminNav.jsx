@@ -13,8 +13,12 @@ const AdminNav = () => {
       path: "/dashboard",
     },
     {
-      display: "Add-Products",
+      display: "Add-Product",
       path: "/dashboard/add-product",
+    },
+    {
+      display: "All-Products",
+      path: "/dashboard/all-products",
     },
     {
       display: "Orders",
@@ -22,7 +26,7 @@ const AdminNav = () => {
     },
     {
       display: "Users",
-      path: "/dashboard/users",
+      path: "/dashboard/all-users",
     },
   ];
   return (
